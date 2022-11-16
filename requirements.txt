@@ -1,8 +1,4 @@
 requests
 beautifulsoup4
 lxml
-json
-os
-re
-sys
 

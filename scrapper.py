@@ -5,6 +5,7 @@ import re
 import sys
 from dataclasses import dataclass
 from typing import List
+import pytest
 
 import requests
 from bs4 import BeautifulSoup

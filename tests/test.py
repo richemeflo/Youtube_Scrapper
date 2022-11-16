@@ -1,14 +1,6 @@
-def setup_module(module):
-    print("\n--> Setup module")
-
-def teardown_module(module):
-    print("--> Teardown module")
+import scrapper as sc
 
 class TestClass:
-    @classmethod
-    def setup_class(cls):
-        print("--> Setup class")
-
-    @classmethod
-    def teardown_class(cls):
-        print("--> Teardown class")
+    def test_load_json(self):
+        with pytest.raises(JsonError):
+            sc.load_json("input.txt")

@@ -37,7 +37,7 @@ class Video:
         self.id = id
         self.title = title
         self.creator = creator
-        self.likes = likes
+        self.likes = int(likes)
         self.description = description
         self.links = links
         self.first_comments = first_comments
@@ -78,7 +78,7 @@ class Video:
     def _get_likes(self):
         return self.likes
     def _set_likes(self,likes):
-        self.likes = likes
+        self.likes = int(likes)
 
     def _get_description(self):
         return self.description
@@ -142,7 +142,7 @@ def scrap(id,nb_comment):
     description,links = transformDescription(description_brut)
     first_comments=[]
     ##first_comments.append(json_data['contents']['twoColumnWatchNextResults']['results']['results']['contents'][4]['itemSectionRenderer']['contents'][0]['commentsEntryPointHeaderRenderer']['contentRenderer']['commentsEntryPointTeaserRenderer']['teaserContent']['simpleText'])
-    v = Video(id, title, creator, int(likes), description, links, first_comments)
+    v = Video(id, title, creator, likes, description, links, first_comments)
     return v
 
     
@@ -190,7 +190,7 @@ def main():
                     json.dump(v.__dict__,fa)
             del v
         except Exception:
-            break
+            pass
 
 if __name__ == '__main__':
     try:

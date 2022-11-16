@@ -190,6 +190,7 @@ def main():
                     json.dump(v.__dict__,fa)
             del v
         except Exception:
+            
             pass
 
 if __name__ == '__main__':

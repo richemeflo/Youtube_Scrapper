@@ -3,5 +3,5 @@ import pytest
 
 class TestClass:
     def test_load_json(self):
-        with pytest.raises(JsonError):
+        with pytest.raises(sc.JsonError):
             sc.load_json("input.txt")

@@ -1,17 +1,16 @@
 import json
-import random
 import os
+import random
 import re
 import sys
 from dataclasses import dataclass
 from typing import List
-import pytest
 
 import requests
 from bs4 import BeautifulSoup
 
 
-class JsonError(Exception):
+class LoadingError(Exception):
     def __init__(self):
         self.message = "JSON error"
     def __str__(self):
@@ -97,17 +96,14 @@ class Video:
         self.first_comments = first_comments
     
 
-
-
-
-def load_json(filename):
+def  load_json(filename):
     if filename[-5:]==".json":
         f= open(filename,"r")
         jsonContent = f.read()
         data = json.loads(jsonContent)
         return data
     else:
-        raise JsonError
+        raise LoadingError
 
 def transformDescription(brut):
     description=""
@@ -115,7 +111,7 @@ def transformDescription(brut):
     for i in range(len(brut)):
         description=description+brut[i]['text']
         if (brut[i]['text'][:4]=="http"):
-             links.append(brut[i]['text'])
+            links.append(brut[i]['text'])
     return [description,links]
 
 def scrap(id,nb_comment):
@@ -150,9 +146,6 @@ def scrap(id,nb_comment):
     return v
 
     
-    
-    
-    
 
 def main():
     nb_comment=1
@@ -182,25 +175,24 @@ def main():
     return [input_file,output_file,nb_comment]
 
 
-
-
-try:
-    input_file,output_file,nb_comment=main()
-    input_data = load_json(input_file)
-    for j in range(len(input_data['videos_id'])):
-        try:
-            v=scrap(input_data['videos_id'][j],1)
-            if j==0:
-                with open(output_file, 'w') as fw:
-                    json.dump(v.__dict__,fw)
-            else:
-                with open(output_file, 'a') as fa:
-                    fa.write(',')
-                    json.dump(v.__dict__,fa)
-            del v
-        except Exception:
-            break
-except ArgError as a:
-    print(a)
-except JsonError as j:
-    print(j)
+if __name__ == '__main__':
+    try:
+        input_file,output_file,nb_comment=main()
+        input_data = load_json(input_file)
+        for j in range(len(input_data['videos_id'])):
+            try:
+                v=scrap(input_data['videos_id'][j],1)
+                if j==0:
+                    with open(output_file, 'w') as fw:
+                        json.dump(v.__dict__,fw)
+                else:
+                    with open(output_file, 'a') as fa:
+                        fa.write(',')
+                        json.dump(v.__dict__,fa)
+                del v
+            except Exception:
+                break
+    except ArgError as a:
+        print(a)
+    except LoadingError as j:
+        print(j)

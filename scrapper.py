@@ -147,7 +147,7 @@ def scrap(id,nb_comment):
 
     
 
-def main():
+def _get_Args():
     nb_comment=1
     args=sys.argv[1:]
     int_cpt=len(args)
@@ -175,23 +175,26 @@ def main():
     return [input_file,output_file,nb_comment]
 
 
+def main():
+    input_file,output_file,nb_comment=_get_Args()
+    input_data = load_json(input_file)
+    for j in range(len(input_data['videos_id'])):
+        try:
+            v=scrap(input_data['videos_id'][j],1)
+            if j==0:
+                with open(output_file, 'w') as fw:
+                    json.dump(v.__dict__,fw)
+            else:
+                with open(output_file, 'a') as fa:
+                    fa.write(',')
+                    json.dump(v.__dict__,fa)
+            del v
+        except Exception:
+            break
+
 if __name__ == '__main__':
     try:
-        input_file,output_file,nb_comment=main()
-        input_data = load_json(input_file)
-        for j in range(len(input_data['videos_id'])):
-            try:
-                v=scrap(input_data['videos_id'][j],1)
-                if j==0:
-                    with open(output_file, 'w') as fw:
-                        json.dump(v.__dict__,fw)
-                else:
-                    with open(output_file, 'a') as fa:
-                        fa.write(',')
-                        json.dump(v.__dict__,fa)
-                del v
-            except Exception:
-                break
+        main()
     except ArgError as a:
         print(a)
     except LoadingError as j:
